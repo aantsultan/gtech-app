@@ -8,6 +8,9 @@ public class ResponseDto<T> {
     private T data;
     private String error;
 
+    public ResponseDto() {
+    }
+
     public ResponseDto(T data) {
         this.data = data;
     }
