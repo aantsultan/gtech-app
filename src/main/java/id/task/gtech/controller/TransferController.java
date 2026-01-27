@@ -1,5 +1,6 @@
 package id.task.gtech.controller;
 
+import id.task.gtech.dto.ResponseDto;
 import id.task.gtech.dto.TransferDto;
 import id.task.gtech.service.TransferService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class TransferController {
     private final TransferService transferService;
 
     @PostMapping("transfer")
-    public ResponseEntity<String> post(@RequestBody TransferDto dto) {
-        return ResponseEntity.ok(transferService.post(dto));
+    public ResponseEntity<ResponseDto<String>> post(@RequestBody TransferDto dto) {
+        return ResponseEntity.ok(new ResponseDto<>(transferService.post(dto)));
     }
 
 }
