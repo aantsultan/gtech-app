@@ -1,6 +1,9 @@
 package id.task.gtech.service;
 
 import id.task.gtech.dto.TransferDto;
+import id.task.gtech.exception.NotFoundException;
+import id.task.gtech.exception.TransferException;
+import id.task.gtech.helper.ExceptionHelper;
 import id.task.gtech.model.Account;
 import id.task.gtech.model.Transfer;
 import id.task.gtech.model.embedded.TransferId;
@@ -9,6 +12,7 @@ import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -23,6 +27,7 @@ public class TransferServiceImpl implements TransferService {
     private final Map<String, Integer> duplicate = new HashMap<>();
 
     @Override
+    @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public String post(TransferDto dto) {
         TransferId transferId = new TransferId();
@@ -35,7 +40,7 @@ public class TransferServiceImpl implements TransferService {
         if (duplicate.get(key) == null) {
             duplicate.put(key, 1);
         } else {
-            throw new RuntimeException("Duplicate transfer !");
+            throw new TransferException(ExceptionHelper.TRANSFER_DUPLICATE);
         }
 
         // 1. create transfer transaction
@@ -50,15 +55,16 @@ public class TransferServiceImpl implements TransferService {
 
         // 2. update debit balance
         Account dbAccount = accountService.findById(debitAccount);
-        if (dbAccount == null) throw new RuntimeException("Source Account is not found");
+        if (dbAccount == null) throw new NotFoundException(ExceptionHelper.ACCOUNT_NOT_FOUND);
         BigDecimal dbBalance = dbAccount.getBalance();
-        if (dbBalance.subtract(amount).compareTo(BigDecimal.ZERO) < 0) throw new RuntimeException("Balance is minus !");
+        if (dbBalance.subtract(amount).compareTo(BigDecimal.ZERO) < 0)
+            throw new TransferException(ExceptionHelper.TRANSFER_MINUS);
         dbAccount.setBalance(dbBalance.subtract(amount));
         accountService.save(dbAccount);
 
         // 3. update credit balance
         Account crAccount = accountService.findById(creditAccount);
-        if (crAccount == null) throw new RuntimeException("Destination Account is not found");
+        if (crAccount == null) throw new NotFoundException(ExceptionHelper.ACCOUNT_NOT_FOUND);
         BigDecimal crBalance = crAccount.getBalance();
         crAccount.setBalance(crBalance.add(amount));
         accountService.save(crAccount);
