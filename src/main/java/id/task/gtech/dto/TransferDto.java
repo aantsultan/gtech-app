@@ -1,4 +1,4 @@
-package id.task.gtech_app.dto;
+package id.task.gtech.dto;
 
 import lombok.Data;
 

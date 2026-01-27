@@ -1,10 +1,10 @@
-package id.task.gtech_app.service;
+package id.task.gtech.service;
 
-import id.task.gtech_app.dto.TransferDto;
-import id.task.gtech_app.model.Account;
-import id.task.gtech_app.model.Transfer;
-import id.task.gtech_app.model.embedded.TransferId;
-import id.task.gtech_app.repository.TransferRepository;
+import id.task.gtech.dto.TransferDto;
+import id.task.gtech.model.Account;
+import id.task.gtech.model.Transfer;
+import id.task.gtech.model.embedded.TransferId;
+import id.task.gtech.repository.TransferRepository;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Lock;

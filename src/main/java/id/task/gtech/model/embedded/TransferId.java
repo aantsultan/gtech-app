@@ -1,4 +1,4 @@
-package id.task.gtech_app.model.embedded;
+package id.task.gtech.model.embedded;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package id.task.gtech_app.controller;
+package id.task.gtech.controller;
 
-import id.task.gtech_app.dto.TransferDto;
-import id.task.gtech_app.service.TransferService;
+import id.task.gtech.dto.TransferDto;
+import id.task.gtech.service.TransferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

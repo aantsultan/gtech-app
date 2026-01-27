@@ -1,6 +1,6 @@
-package id.task.gtech_app.service;
+package id.task.gtech.service;
 
-import id.task.gtech_app.model.Account;
+import id.task.gtech.model.Account;
 
 public interface AccountService {
 

@@ -1,7 +1,7 @@
-package id.task.gtech_app.repository;
+package id.task.gtech.repository;
 
-import id.task.gtech_app.model.Transfer;
-import id.task.gtech_app.model.embedded.TransferId;
+import id.task.gtech.model.Transfer;
+import id.task.gtech.model.embedded.TransferId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

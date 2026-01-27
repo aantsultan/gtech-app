@@ -1,7 +1,7 @@
-package id.task.gtech_app.service;
+package id.task.gtech.service;
 
-import id.task.gtech_app.model.Account;
-import id.task.gtech_app.repository.AccountRepository;
+import id.task.gtech.model.Account;
+import id.task.gtech.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

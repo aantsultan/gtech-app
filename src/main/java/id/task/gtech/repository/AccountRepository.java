@@ -1,6 +1,6 @@
-package id.task.gtech_app.repository;
+package id.task.gtech.repository;
 
-import id.task.gtech_app.model.Account;
+import id.task.gtech.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

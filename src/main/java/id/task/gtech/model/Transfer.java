@@ -1,6 +1,6 @@
-package id.task.gtech_app.model;
+package id.task.gtech.model;
 
-import id.task.gtech_app.model.embedded.TransferId;
+import id.task.gtech.model.embedded.TransferId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.Data;

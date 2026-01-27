@@ -1,4 +1,4 @@
-package id.task.gtech_app;
+package id.task.gtech;
 
 import org.junit.jupiter.api.Test;
 

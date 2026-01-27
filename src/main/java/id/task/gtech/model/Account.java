@@ -1,4 +1,4 @@
-package id.task.gtech_app.model;
+package id.task.gtech.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
