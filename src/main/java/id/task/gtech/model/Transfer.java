@@ -1,8 +1,6 @@
 package id.task.gtech.model;
 
-import id.task.gtech.model.embedded.TransferId;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,8 +9,16 @@ import java.math.BigDecimal;
 @Entity
 public class Transfer {
 
-    @EmbeddedId
-    private TransferId transferId;
+    @Id
+    @Column(name = "transfer_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String debitAccount;
+    private String creditAccount;
+
+    @Column(name = "transaction_code", unique = true)
+    private String transactionCode;
+
     private BigDecimal amount;
 
 }

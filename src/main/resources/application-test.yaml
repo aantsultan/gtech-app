@@ -8,3 +8,8 @@ spring:
     console:
       enabled: true           # Enables H2 web console at /h2-console
       path: /h2-console
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

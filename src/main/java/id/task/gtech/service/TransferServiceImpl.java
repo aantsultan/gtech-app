@@ -6,13 +6,13 @@ import id.task.gtech.exception.TransferException;
 import id.task.gtech.helper.ExceptionHelper;
 import id.task.gtech.model.Account;
 import id.task.gtech.model.Transfer;
-import id.task.gtech.model.embedded.TransferId;
 import id.task.gtech.repository.TransferRepository;
 import jakarta.persistence.LockModeType;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -30,28 +30,25 @@ public class TransferServiceImpl implements TransferService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public String post(TransferDto dto) {
-        TransferId transferId = new TransferId();
         String debitAccount = dto.getDebitAccount();
         String creditAccount = dto.getCreditAccount();
         String transactionCode = dto.getTransactionCode();
 
-        // 0. validation duplicate
-        String key = debitAccount + creditAccount + transactionCode;
-        if (duplicate.get(key) == null) {
-            duplicate.put(key, 1);
-        } else {
-            throw new TransferException(ExceptionHelper.TRANSFER_DUPLICATE);
-        }
-
         // 1. create transfer transaction
         BigDecimal amount = dto.getAmount();
-        transferId.setDebitAccount(debitAccount);
-        transferId.setCreditAccount(creditAccount);
-        transferId.setTransactionCode(transactionCode);
         Transfer transfer = new Transfer();
-        transfer.setTransferId(transferId);
+        transfer.setDebitAccount(debitAccount);
+        transfer.setCreditAccount(creditAccount);
+        transfer.setTransactionCode(transactionCode);
         transfer.setAmount(amount);
-        repository.save(transfer);
+
+        try {
+            repository.save(transfer);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("Unique index or primary key violation")) {
+                throw new TransferException(ExceptionHelper.TRANSFER_DUPLICATE);
+            }
+        }
 
         // 2. update debit balance
         Account dbAccount = accountService.findById(debitAccount);
