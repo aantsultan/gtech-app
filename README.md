@@ -11,3 +11,5 @@ Requirement :
 This project contain unit test. 
 
 Please run the code in Intellij to run project easier by using Maven Wrapper
+
+Use this command to test by using Jacoco
