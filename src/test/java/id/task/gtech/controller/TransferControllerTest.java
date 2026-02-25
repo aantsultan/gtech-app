@@ -258,8 +258,16 @@ class TransferControllerTest {
         String request = objectMapper.writeValueAsString(transferDto);
 
         for (int i = 0; i < 2; i++) {
-            mockMvc.perform(MockMvcRequestBuilders.post("/transfer")
+            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/transfer")
                     .contentType(MediaType.APPLICATION_JSON).content(request)).andReturn();
+
+            if (i == 1) {
+                int status = mvcResult.getResponse().getStatus();
+                Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), status); // not minus error
+                ResponseDto<String> responseDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ResponseDto<String>>() {
+                });
+                Assertions.assertNotNull(responseDto.getError());
+            }
         }
 
         // 1. Check if balance DB Account still same
@@ -285,6 +293,24 @@ class TransferControllerTest {
         data = responseDtoAcc.getData();
         Assertions.assertEquals(CR_ACCOUNT, data.getAccountNo());
         Assertions.assertEquals(0, CR_BALANCE.add(AMOUNT).compareTo(data.getBalance()));
+    }
+
+    @Test
+    void transfer_OtherDataIntegrityViolation() throws Exception {
+        TransferDto transferDto = new TransferDto();
+        transferDto.setDebitAccount(DB_ACCOUNT);
+        transferDto.setCreditAccount(CR_ACCOUNT);
+        transferDto.setAmount(AMOUNT);
+        transferDto.setTransactionCode(null);
+        String request = objectMapper.writeValueAsString(transferDto);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/transfer")
+                .contentType(MediaType.APPLICATION_JSON).content(request)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), status); // not minus error
+        ResponseDto<String> responseDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ResponseDto<String>>() {
+        });
+        Assertions.assertNotNull(responseDto.getError());
     }
 
 }

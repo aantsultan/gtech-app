@@ -10,13 +10,10 @@ import id.task.gtech.repository.TransferRepository;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +21,6 @@ public class TransferServiceImpl implements TransferService {
 
     private final TransferRepository repository;
     private final AccountService accountService;
-    private final Map<String, Integer> duplicate = new HashMap<>();
 
     @Override
     @Transactional
@@ -41,14 +37,7 @@ public class TransferServiceImpl implements TransferService {
         transfer.setCreditAccount(creditAccount);
         transfer.setTransactionCode(transactionCode);
         transfer.setAmount(amount);
-
-        try {
-            repository.save(transfer);
-        } catch (DataIntegrityViolationException e) {
-            if (e.getMessage().contains("Unique index or primary key violation")) {
-                throw new TransferException(ExceptionHelper.TRANSFER_DUPLICATE);
-            }
-        }
+        repository.save(transfer);
 
         // 2. update debit balance
         Account dbAccount = accountService.findById(debitAccount);

@@ -13,10 +13,14 @@ public class Transfer {
     @Column(name = "transfer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String debitAccount;
+
+    @Column(nullable = false)
     private String creditAccount;
 
-    @Column(name = "transaction_code", unique = true)
+    @Column(name = "transaction_code", unique = true, nullable = false)
     private String transactionCode;
 
     private BigDecimal amount;

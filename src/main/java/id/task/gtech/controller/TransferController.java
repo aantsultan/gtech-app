@@ -4,6 +4,7 @@ import id.task.gtech.dto.ResponseDto;
 import id.task.gtech.dto.TransferDto;
 import id.task.gtech.service.TransferService;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,7 @@ public class TransferController {
     private final TransferService transferService;
 
     @PostMapping("transfer")
-    public ResponseEntity<ResponseDto<String>> post(@RequestBody TransferDto dto) {
+    public ResponseEntity<@NonNull ResponseDto<String>> post(@RequestBody TransferDto dto) {
         return ResponseEntity.ok(new ResponseDto<>(transferService.post(dto)));
     }
 
